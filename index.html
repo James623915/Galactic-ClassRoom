@@ -1,0 +1,1496 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Star · Galactic Portfolio</title>
+    <meta name="description" content="Personal portfolio of The Star" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Exo+2:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --space: #05060f;
+        --text: #e6ecff;
+        --muted: #9aa6c8;
+        --holo: #7df9ff;
+        --blue: #4fc3ff;
+        --green: #5dff7a;
+        --red: #ff3b3b;
+        --purple: #b46bff;
+        --gold: #ffe81f;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: "Exo 2", sans-serif;
+        color: var(--text);
+        background: var(--space);
+        line-height: 1.7;
+        overflow-x: hidden;
+      }
+
+      h1,
+      h2,
+      h3,
+      .logo,
+      .kicker,
+      .btn {
+        font-family: "Orbitron", sans-serif;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      .container {
+        width: min(1100px, 90%);
+        margin: 0 auto;
+      }
+
+      /* ---------- Starfield + decorative planets ---------- */
+      #stars {
+        position: fixed;
+        inset: 0;
+        z-index: -2;
+        display: block;
+      }
+
+      .planet {
+        position: fixed;
+        border-radius: 50%;
+        z-index: -1;
+        opacity: 0.85;
+        animation: drift 30s ease-in-out infinite;
+        pointer-events: none;
+      }
+      .planet.p1 {
+        width: 220px;
+        height: 220px;
+        top: 14%;
+        right: -70px;
+        background: radial-gradient(
+          circle at 30% 30%,
+          #ffcf9e,
+          #e0673a 45%,
+          #4a1408 100%
+        );
+        box-shadow:
+          inset -30px -20px 50px rgba(0, 0, 0, 0.65),
+          0 0 60px rgba(255, 120, 60, 0.25);
+      }
+      .planet.p1::after {
+        content: "";
+        position: absolute;
+        left: -35%;
+        top: 40%;
+        width: 170%;
+        height: 22%;
+        border: 5px solid rgba(255, 214, 170, 0.5);
+        border-radius: 50%;
+        transform: rotate(-18deg);
+      }
+      .planet.p2 {
+        width: 120px;
+        height: 120px;
+        bottom: 8%;
+        left: -30px;
+        background: radial-gradient(
+          circle at 35% 30%,
+          #c6ffd1,
+          #2fbf71 45%,
+          #06301d 100%
+        );
+        box-shadow:
+          inset -20px -15px 35px rgba(0, 0, 0, 0.6),
+          0 0 40px rgba(93, 255, 122, 0.2);
+        animation-delay: -12s;
+      }
+      @keyframes drift {
+        0%,
+        100% {
+          transform: translate(0, 0);
+        }
+        50% {
+          transform: translate(-20px, 25px);
+        }
+      }
+
+      /* ---------- Opening crawl intro ---------- */
+      body.intro-active {
+        overflow: hidden;
+      }
+      body.intro-active > header,
+      body.intro-active > main,
+      body.intro-active > footer {
+        display: none;
+      }
+
+      #intro {
+        position: fixed;
+        inset: 0;
+        z-index: 100;
+        overflow: hidden;
+        transition: opacity 0.9s;
+      }
+      #intro.leaving {
+        opacity: 0;
+      }
+
+      .intro-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 90%;
+        max-width: 700px;
+        color: #4bd5ee;
+        font-size: clamp(1.2rem, 3vw, 2rem);
+        opacity: 0;
+        animation: introText 5s ease 0.5s forwards;
+      }
+      @keyframes introText {
+        0% {
+          opacity: 0;
+        }
+        15%,
+        80% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+        }
+      }
+
+      .intro-logo {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        z-index: 3;
+        width: 95%;
+        text-align: center;
+        font-family: "Orbitron", sans-serif;
+        font-weight: 900;
+        font-size: clamp(3rem, 12vw, 9rem);
+        line-height: 1;
+        text-transform: uppercase;
+        color: transparent;
+        -webkit-text-stroke: 2px var(--gold);
+        opacity: 0;
+        animation: logo 9s ease-out 6s forwards;
+      }
+      @keyframes logo {
+        0% {
+          opacity: 1;
+          transform: translate(-50%, -50%) scale(2.5);
+        }
+        90% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+          transform: translate(-50%, -50%) scale(0.1);
+        }
+      }
+
+      .crawl-fade {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 35%;
+        background: linear-gradient(var(--space) 20%, transparent);
+        z-index: 2;
+        pointer-events: none;
+      }
+      .crawl-wrap {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        justify-content: center;
+        perspective: 400px;
+      }
+      .crawl {
+        position: relative;
+        top: 100vh;
+        width: min(720px, 88vw);
+        color: var(--gold);
+        font-size: clamp(1.3rem, 3.5vw, 2.3rem);
+        font-weight: 700;
+        text-align: justify;
+        transform-origin: 50% 100%;
+        animation: crawl 45s linear 8s forwards;
+      }
+      .crawl .episode {
+        text-align: center;
+        text-transform: uppercase;
+      }
+      .crawl h2 {
+        text-align: center;
+        text-transform: uppercase;
+        font-size: 1.6em;
+        margin-bottom: 1em;
+      }
+      .crawl p {
+        margin-bottom: 1.2em;
+      }
+      @keyframes crawl {
+        0% {
+          top: 100vh;
+          transform: rotateX(25deg) translateZ(0);
+        }
+        100% {
+          top: -200vh;
+          transform: rotateX(25deg) translateZ(-2500px);
+        }
+      }
+
+      #skip-intro {
+        position: absolute;
+        bottom: 24px;
+        right: 24px;
+        z-index: 5;
+        font-size: 0.75rem;
+        padding: 0.7rem 1.3rem;
+      }
+
+      /* ---------- Navigation ---------- */
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        backdrop-filter: blur(12px);
+        background: rgba(5, 6, 15, 0.6);
+        border-bottom: 1px solid rgba(125, 249, 255, 0.15);
+      }
+      nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem 0;
+      }
+      .logo {
+        font-size: 1.5rem;
+        font-weight: 900;
+        color: var(--gold);
+        text-shadow: 0 0 10px rgba(255, 232, 31, 0.6);
+        letter-spacing: 0.1em;
+      }
+      .nav-links {
+        display: flex;
+        gap: 0.3rem;
+        list-style: none;
+      }
+      .nav-links a {
+        font-family: "Orbitron", sans-serif;
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        padding: 0.5rem 0.9rem;
+        border-radius: 999px;
+        transition:
+          color 0.25s,
+          text-shadow 0.25s,
+          background 0.25s;
+      }
+      .nav-links a:hover {
+        color: var(--holo);
+        text-shadow: 0 0 8px var(--holo);
+        background: rgba(125, 249, 255, 0.08);
+      }
+      .menu-btn {
+        display: none;
+        background: none;
+        border: none;
+        font-size: 1.8rem;
+        cursor: pointer;
+        color: var(--holo);
+      }
+
+      /* ---------- Lighter buttons ---------- */
+      .btn {
+        --c: var(--blue);
+        display: inline-block;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        padding: 0.9rem 1.6rem;
+        margin: 0 0.7rem 0.8rem 0;
+        border-radius: 999px;
+        border: 2px solid #fff;
+        color: #fff;
+        background: rgba(255, 255, 255, 0.03);
+        cursor: pointer;
+        box-shadow:
+          0 0 4px #fff,
+          0 0 12px var(--c),
+          0 0 28px var(--c),
+          inset 0 0 12px var(--c);
+        transition:
+          transform 0.25s,
+          box-shadow 0.25s;
+      }
+      .btn:hover {
+        transform: translateY(-3px);
+        box-shadow:
+          0 0 6px #fff,
+          0 0 20px var(--c),
+          0 0 48px var(--c),
+          inset 0 0 18px var(--c);
+      }
+      .btn-red {
+        --c: var(--red);
+      }
+      .btn-green {
+        --c: var(--green);
+      }
+
+      /* ---------- Hero ---------- */
+      .hero {
+        min-height: 88vh;
+        display: grid;
+        grid-template-columns: 1.3fr 1fr;
+        align-items: center;
+        gap: 4rem;
+        padding: 4rem 0;
+      }
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-family: "Orbitron", sans-serif;
+        font-size: 0.75rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--holo);
+        border: 1px solid rgba(125, 249, 255, 0.4);
+        padding: 0.4rem 1rem;
+        border-radius: 999px;
+        margin-bottom: 1.4rem;
+      }
+      .badge .dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: var(--red);
+        box-shadow: 0 0 8px var(--red);
+        animation: blink 1.2s infinite;
+      }
+      @keyframes blink {
+        50% {
+          opacity: 0.2;
+        }
+      }
+
+      .hero h1 {
+        font-size: clamp(2.1rem, 5.2vw, 3.8rem);
+        line-height: 1.15;
+        margin-bottom: 1.2rem;
+      }
+      .hero h1 .highlight {
+        color: var(--gold);
+        text-shadow: 0 0 18px rgba(255, 232, 31, 0.5);
+      }
+      .hero p {
+        font-size: 1.15rem;
+        color: var(--muted);
+        max-width: 520px;
+        margin-bottom: 2rem;
+      }
+
+      /* Hologram avatar */
+      .holo-wrap {
+        position: relative;
+        width: min(280px, 62vw);
+        aspect-ratio: 1;
+        margin: 3rem auto;
+      }
+      .holo-wrap::after {
+        content: "";
+        position: absolute;
+        bottom: -45px;
+        left: 50%;
+        width: 70%;
+        height: 40px;
+        transform: translateX(-50%);
+        background: radial-gradient(
+          ellipse,
+          rgba(125, 249, 255, 0.45),
+          transparent 70%
+        );
+      }
+      .holo {
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+        background: radial-gradient(
+          circle,
+          rgba(125, 249, 255, 0.25),
+          rgba(125, 249, 255, 0.04) 70%
+        );
+        border: 2px solid rgba(125, 249, 255, 0.6);
+        box-shadow:
+          0 0 30px rgba(125, 249, 255, 0.35),
+          inset 0 0 40px rgba(125, 249, 255, 0.25);
+        font-family: "Orbitron", sans-serif;
+        font-size: clamp(1.8rem, 7vw, 2.6rem);
+        font-weight: 900;
+        color: var(--holo);
+        text-shadow: 0 0 14px var(--holo);
+        animation: flicker 5s infinite;
+      }
+      .holo::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: repeating-linear-gradient(
+          0deg,
+          rgba(125, 249, 255, 0.12) 0 2px,
+          transparent 2px 5px
+        );
+        animation: scan 3s linear infinite;
+        pointer-events: none;
+      }
+      .holo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: grayscale(1) sepia(1) hue-rotate(150deg) saturate(2.5)
+          brightness(1.05);
+        opacity: 0.85;
+      }
+      @keyframes scan {
+        to {
+          background-position: 0 50px;
+        }
+      }
+      @keyframes flicker {
+        0%,
+        92%,
+        94%,
+        97%,
+        100% {
+          opacity: 1;
+        }
+        93% {
+          opacity: 0.55;
+        }
+        96% {
+          opacity: 0.75;
+        }
+      }
+
+      .orbit {
+        position: absolute;
+        inset: -28px;
+        border: 1px dashed rgba(125, 249, 255, 0.3);
+        border-radius: 50%;
+        animation: spin 16s linear infinite;
+      }
+      .orbit.o2 {
+        inset: -62px;
+        border-color: rgba(255, 232, 31, 0.2);
+        animation-duration: 26s;
+        animation-direction: reverse;
+      }
+      .orbit span {
+        position: absolute;
+        top: -18px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 1.8rem;
+      }
+
+      /* Flashing / blinking effects for orbit emojis */
+      .orbit.o2 span {
+        animation: ufoBlink 1s ease-in-out infinite alternate;
+      }
+      .orbit span:not(.ufo) {
+        animation: eyeFlash 2.5s ease-in-out infinite;
+      }
+
+      @keyframes ufoBlink {
+        0% {
+          filter: drop-shadow(0 0 2px rgba(255, 232, 31, 0.4));
+          opacity: 0.6;
+          transform: translateX(-50%) scale(0.95);
+        }
+        100% {
+          filter: drop-shadow(0 0 14px rgba(255, 232, 31, 1));
+          opacity: 1;
+          transform: translateX(-50%) scale(1.1);
+        }
+      }
+      @keyframes eyeFlash {
+        0%,
+        80%,
+        100% {
+          filter: drop-shadow(0 0 2px var(--holo));
+          opacity: 1;
+        }
+        85%,
+        95% {
+          filter: drop-shadow(0 0 18px #ff3b3b);
+          opacity: 0.4;
+          transform: translateX(-50%) scale(0.85);
+        }
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* ---------- Sections ---------- */
+      section {
+        padding: 5rem 0;
+      }
+      .kicker {
+        display: block;
+        font-size: 0.78rem;
+        letter-spacing: 0.25em;
+        text-transform: uppercase;
+        color: var(--holo);
+        margin-bottom: 0.5rem;
+      }
+      .section-title {
+        font-size: clamp(1.8rem, 4vw, 2.6rem);
+        margin-bottom: 0.4rem;
+      }
+      .section-sub {
+        color: var(--muted);
+        margin-bottom: 2.5rem;
+        font-size: 1.1rem;
+      }
+
+      /* Holographic card */
+      .holo-card {
+        position: relative;
+        background: linear-gradient(
+          160deg,
+          rgba(20, 40, 80, 0.45),
+          rgba(10, 15, 35, 0.6)
+        );
+        border: 1px solid rgba(125, 249, 255, 0.25);
+        border-radius: 18px;
+        padding: 2rem;
+        backdrop-filter: blur(6px);
+        overflow: hidden;
+        box-shadow:
+          0 0 24px rgba(125, 249, 255, 0.08),
+          inset 0 0 30px rgba(125, 249, 255, 0.05);
+        transition:
+          transform 0.3s,
+          box-shadow 0.3s,
+          border-color 0.3s;
+      }
+      .holo-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: repeating-linear-gradient(
+          0deg,
+          rgba(125, 249, 255, 0.03) 0 2px,
+          transparent 2px 4px
+        );
+        pointer-events: none;
+      }
+      .holo-card:hover {
+        transform: translateY(-6px);
+        border-color: rgba(125, 249, 255, 0.6);
+        box-shadow:
+          0 0 36px rgba(125, 249, 255, 0.2),
+          inset 0 0 30px rgba(125, 249, 255, 0.08);
+      }
+      .card-bar {
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+        font-family: "Orbitron", sans-serif;
+        font-size: 0.7rem;
+        letter-spacing: 0.2em;
+        color: var(--holo);
+        margin-bottom: 1.2rem;
+      }
+      .card-bar i {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        display: inline-block;
+      }
+      .card-bar i:nth-child(1) {
+        background: var(--red);
+      }
+      .card-bar i:nth-child(2) {
+        background: var(--gold);
+      }
+      .card-bar i:nth-child(3) {
+        background: var(--green);
+        margin-right: 0.5rem;
+      }
+
+      /* Profile */
+      .about-grid {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr;
+        gap: 2rem;
+      }
+      .about-grid .holo-card p + p {
+        margin-top: 1rem;
+      }
+      .facts {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+      .fact {
+        padding: 1.3rem 1rem;
+        text-align: center;
+      }
+      .fact .emoji {
+        font-size: 1.8rem;
+        display: block;
+      }
+      .fact .label {
+        display: block;
+        font-family: "Orbitron", sans-serif;
+        font-size: 0.65rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin: 0.3rem 0 0.2rem;
+      }
+      .fact strong {
+        font-weight: 700;
+      }
+
+      /* Abilities (lighter bars) */
+      .abilities {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.8rem 3rem;
+      }
+      .ability {
+        --c: var(--blue);
+      }
+      .ability:nth-child(5n + 2) {
+        --c: var(--green);
+      }
+      .ability:nth-child(5n + 3) {
+        --c: var(--red);
+      }
+      .ability:nth-child(5n + 4) {
+        --c: var(--purple);
+      }
+      .ability:nth-child(5n + 5) {
+        --c: var(--gold);
+      }
+      .ability-head {
+        display: flex;
+        justify-content: space-between;
+        font-family: "Orbitron", sans-serif;
+        font-size: 0.85rem;
+        letter-spacing: 0.08em;
+        margin-bottom: 0.5rem;
+      }
+      .ability-head span:last-child {
+        color: var(--muted);
+      }
+      .saber {
+        display: flex;
+        align-items: center;
+      }
+      .hilt {
+        width: 48px;
+        height: 14px;
+        flex-shrink: 0;
+        border-radius: 3px;
+        background: repeating-linear-gradient(
+          90deg,
+          #a5aeb8 0 6px,
+          #4b5563 6px 9px
+        );
+        border-right: 4px solid #1f2937;
+      }
+      .blade-track {
+        flex: 1;
+      }
+      .blade {
+        height: 6px;
+        width: 0;
+        border-radius: 0 6px 6px 0;
+        background: #fff;
+        box-shadow:
+          0 0 4px #fff,
+          0 0 10px var(--c),
+          0 0 22px var(--c);
+        transition: width 1.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      .abilities.visible .blade {
+        width: var(--level);
+      }
+
+      /* Missions */
+      .projects {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.8rem;
+      }
+      .mission {
+        padding: 0;
+      }
+      .mission-cover {
+        position: relative;
+        height: 170px;
+        display: grid;
+        place-items: center;
+        border-bottom: 1px solid rgba(125, 249, 255, 0.2);
+        background:
+          radial-gradient(1px 1px at 20% 30%, #fff, transparent),
+          radial-gradient(1px 1px at 70% 65%, #fff, transparent),
+          radial-gradient(1.5px 1.5px at 40% 80%, #fff, transparent),
+          radial-gradient(1px 1px at 85% 20%, #fff, transparent),
+          radial-gradient(1px 1px at 10% 75%, #fff, transparent),
+          linear-gradient(160deg, #0b1030, #05060f);
+      }
+      .mission-id {
+        position: absolute;
+        top: 12px;
+        left: 14px;
+        font-family: "Orbitron", sans-serif;
+        font-size: 0.7rem;
+        letter-spacing: 0.2em;
+        color: var(--gold);
+      }
+      .mini-planet {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        box-shadow: inset -18px -12px 28px rgba(0, 0, 0, 0.6);
+        transition: transform 0.6s;
+      }
+      .mission:hover .mini-planet {
+        transform: scale(1.12) rotate(20deg);
+      }
+      .mission:nth-child(1) .mini-planet {
+        background: radial-gradient(
+          circle at 30% 30%,
+          #e0f7ff,
+          #4fc3ff 50%,
+          #0a2a4a
+        );
+        box-shadow:
+          inset -18px -12px 28px rgba(0, 0, 0, 0.6),
+          0 0 30px rgba(79, 195, 255, 0.4);
+      }
+      .mission:nth-child(2) .mini-planet {
+        background: radial-gradient(
+          circle at 30% 30%,
+          #fff3c4,
+          #e0a84f 50%,
+          #5a3510
+        );
+        box-shadow:
+          inset -18px -12px 28px rgba(0, 0, 0, 0.6),
+          0 0 30px rgba(255, 200, 100, 0.35);
+      }
+      .mission:nth-child(3) .mini-planet {
+        background: radial-gradient(
+          circle at 30% 30%,
+          #ffc4c4,
+          #ff3b3b 50%,
+          #3a0505
+        );
+        box-shadow:
+          inset -18px -12px 28px rgba(0, 0, 0, 0.6),
+          0 0 30px rgba(255, 59, 59, 0.4);
+      }
+      .mission-body {
+        padding: 1.6rem;
+      }
+      .mission-body h3 {
+        font-size: 1.15rem;
+        margin-bottom: 0.5rem;
+      }
+      .mission-body p {
+        color: var(--muted);
+        margin-bottom: 1rem;
+      }
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+      }
+      .tag {
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding: 0.2rem 0.7rem;
+        border-radius: 999px;
+        color: var(--holo);
+        border: 1px solid rgba(125, 249, 255, 0.4);
+        background: rgba(125, 249, 255, 0.06);
+      }
+
+      /* Star log (timeline) */
+      .timeline {
+        position: relative;
+        padding-left: 2.2rem;
+      }
+      .timeline::before {
+        content: "";
+        position: absolute;
+        left: 0.6rem;
+        top: 0.5rem;
+        bottom: 0.5rem;
+        width: 4px;
+        border-radius: 4px;
+        background: linear-gradient(var(--green), var(--blue));
+        box-shadow:
+          0 0 10px var(--green),
+          0 0 20px var(--blue);
+      }
+      .milestone {
+        margin-bottom: 1.8rem;
+        overflow: visible;
+      }
+      .milestone::after {
+        content: "";
+        position: absolute;
+        left: -2.05rem;
+        top: 2rem;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: #fff;
+        box-shadow:
+          0 0 8px #fff,
+          0 0 16px var(--green);
+      }
+      .milestone .when {
+        display: inline-block;
+        font-family: "Orbitron", sans-serif;
+        font-size: 0.72rem;
+        letter-spacing: 0.15em;
+        color: var(--gold);
+        margin-bottom: 0.3rem;
+      }
+      .milestone h3 {
+        font-size: 1.1rem;
+        margin-bottom: 0.3rem;
+      }
+      .milestone p {
+        color: var(--muted);
+      }
+
+      /* Comms */
+      .contact {
+        text-align: center;
+      }
+      .contact .holo-card {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 3rem 2rem;
+      }
+      .contact h2 {
+        font-size: clamp(1.7rem, 4vw, 2.4rem);
+        margin-bottom: 0.6rem;
+      }
+      .contact p {
+        color: var(--muted);
+        margin-bottom: 2rem;
+      }
+      .socials {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+        margin-top: 1.2rem;
+      }
+      .socials a {
+        padding: 0.55rem 1.3rem;
+        border-radius: 999px;
+        border: 1px solid rgba(125, 249, 255, 0.4);
+        color: var(--holo);
+        font-weight: 700;
+        transition:
+          background 0.25s,
+          box-shadow 0.25s,
+          transform 0.25s;
+      }
+      .socials a:hover {
+        background: rgba(125, 249, 255, 0.1);
+        box-shadow: 0 0 16px rgba(125, 249, 255, 0.35);
+        transform: translateY(-3px);
+      }
+      .droid-note {
+        margin-top: 1.8rem;
+        font-size: 0.9rem;
+        color: var(--muted);
+      }
+
+      footer {
+        text-align: center;
+        padding: 2rem 0 3rem;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+      footer button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--holo);
+        font: inherit;
+        margin-top: 0.5rem;
+        text-decoration: underline;
+      }
+
+      /* ---------- Scroll reveal ---------- */
+      .reveal {
+        opacity: 0;
+        transform: translateY(40px);
+        transition:
+          opacity 0.8s ease,
+          transform 0.8s ease;
+      }
+      .reveal.visible {
+        opacity: 1;
+        transform: none;
+      }
+
+      /* ---------- Responsive ---------- */
+      @media (max-width: 850px) {
+        .hero {
+          grid-template-columns: 1fr;
+          text-align: center;
+          padding-top: 2rem;
+          gap: 2rem;
+        }
+        .hero p {
+          margin-left: auto;
+          margin-right: auto;
+        }
+        .holo-col {
+          order: -1;
+        }
+        .about-grid,
+        .abilities {
+          grid-template-columns: 1fr;
+        }
+        .planet {
+          opacity: 0.45;
+        }
+
+        .menu-btn {
+          display: block;
+        }
+        .nav-links {
+          position: absolute;
+          top: 100%;
+          left: 0;
+          right: 0;
+          flex-direction: column;
+          align-items: center;
+          background: rgba(5, 6, 15, 0.95);
+          padding: 1rem 0;
+          display: none;
+        }
+        .nav-links.open {
+          display: flex;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation: none !important;
+          transition: none !important;
+        }
+        .reveal {
+          opacity: 1;
+          transform: none;
+        }
+        .blade {
+          width: var(--level);
+        }
+      }
+    </style>
+  </head>
+  <body class="intro-active">
+    <!-- Starfield + planets -->
+    <canvas id="stars"></canvas>
+    <div class="planet p1"></div>
+    <div class="planet p2"></div>
+
+    <!-- ===== Opening crawl ===== -->
+    <div id="intro" aria-hidden="true">
+      <p class="intro-text">
+        Not so long ago, in a galaxy<br />not so far away....
+      </p>
+      <h1 class="intro-logo">The Star</h1>
+      <div class="crawl-fade"></div>
+      <div class="crawl-wrap">
+        <div class="crawl">
+          <p class="episode">Episode I</p>
+          <h2>A New Portfolio</h2>
+          <p>
+            It is a period of great creativity. A young Star
+            has emerged from the outer rim of the universe, armed with curiosity
+            and inspiration.
+          </p>
+          <p>
+            Across many missions, our hero has built confidence, learned
+            from one another, and helped each other to shine across the galaxy.
+          </p>
+          <p>
+            Now, a new mission has been launched to share these adventures
+            with the universe, and to open a channel to new stars.
+          </p>
+        </div>
+      </div>
+      <button id="skip-intro" class="btn">Skip intro ⏭</button>
+    </div>
+
+    <!-- ===== Navigation ===== -->
+    <header>
+      <nav class="container">
+        <a href="#home" class="logo">The Star</a>
+        <button class="menu-btn" aria-label="Open menu">☰</button>
+        <ul class="nav-links">
+          <li><a href="#about">Universe</a></li>
+          <li><a href="#skills">Abilities</a></li>
+          <li><a href="#projects">Missions</a></li>
+          <li><a href="#journey">Star Log</a></li>
+          <li><a href="#contact">Comms</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <!-- ===== Hero ===== -->
+      <section id="home" class="container hero">
+        <div class="reveal">
+          <span class="badge"
+            ><span class="dot"></span>Incoming transmission · [Your role]</span
+          >
+          <h1>
+            Greetings, new Stars.<br />I'm <span class="highlight">your navigator</span>
+          </h1>
+          <p>
+            The purpose of this project is to give back to my Star/Thai community 
+            specifically underprivileged people to use and learn English at no cost. 
+            As a navigator, I will encourage and support our stars to shine light by themselves.
+            [A short line about you, e.g. "A designer and developer from planet
+            Earth, building friendly things across the galaxy."]
+          </p>
+          <a href="#projects" class="btn">View missions</a>
+          <a href="#contact" class="btn btn-red">Open comms</a>
+          <button id="warp-btn" class="btn btn-green">⚡ Hyperspace</button>
+        </div>
+
+        <div class="holo-col reveal">
+          <div class="holo-wrap">
+            <div class="orbit o2"><span class="ufo">🛸</span></div>
+            <div class="orbit"><span>👽</span></div>
+            <!-- To use your photo as a hologram, replace The Star with: <img src="me.jpg" alt="The Star"> -->
+            <div class="holo">The Star</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== Profile ===== -->
+      <section id="about" class="container">
+        <span class="kicker reveal">// 01 · Identity file</span>
+        <h2 class="section-title reveal">Who goes there?</h2>
+        <p class="section-sub reveal">Decoded from a friendly transmission.</p>
+
+        <div class="about-grid">
+          <div class="holo-card reveal">
+            <div class="card-bar">
+              <i></i><i></i><i></i>IDENTITY FILE · CLEARANCE: FRIENDLY
+            </div>
+            <p>
+              I am captain James living in the US.
+            </p>
+            <p>
+              This program is designed for underprivileged people to learn English and encourage them to pursue higher goal.
+            </p>
+            <p>
+              Personally, Learning new things is fun and challenging. 
+            </p>
+          </div>
+
+          <div class="facts reveal">
+            <div class="holo-card fact">
+              <span class="emoji">🪐</span><span class="label">Home planet</span
+              ><strong>[Your City], Earth</strong>
+            </div>
+            <div class="holo-card fact">
+              <span class="emoji">🧬</span><span class="label">Species</span
+              ><strong>[Human (probably)]</strong>
+            </div>
+            <div class="holo-card fact">
+              <span class="emoji">🎓</span><span class="label">Academy</span
+              ><strong>[Your School]</strong>
+            </div>
+            <div class="holo-card fact">
+              <span class="emoji">🎧</span><span class="label">Off duty</span
+              ><strong>[A Hobby]</strong>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== Abilities ===== -->
+      <section id="skills" class="container">
+        <span class="kicker reveal">// 02 · Abilities</span>
+        <h2 class="section-title reveal">My powers</h2>
+        <p class="section-sub reveal">Skills honed across many star systems.</p>
+
+        <div class="abilities reveal">
+          <div class="ability" style="--level: 90%">
+            <div class="ability-head">
+              <span>[Skill - Proactive Learning]</span><span>90%</span>
+            </div>
+            <div class="saber">
+              <div class="hilt"></div>
+              <div class="blade-track"><div class="blade"></div></div>
+            </div>
+          </div>
+          <div class="ability" style="--level: 85%">
+            <div class="ability-head">
+              <span>[Skill - Vocabulary]</span><span>85%</span>
+            </div>
+            <div class="saber">
+              <div class="hilt"></div>
+              <div class="blade-track"><div class="blade"></div></div>
+            </div>
+          </div>
+          <div class="ability" style="--level: 80%">
+            <div class="ability-head">
+              <span>[Skill - Social]</span><span>80%</span>
+            </div>
+            <div class="saber">
+              <div class="hilt"></div>
+              <div class="blade-track"><div class="blade"></div></div>
+            </div>
+          </div>
+          <div class="ability" style="--level: 75%">
+            <div class="ability-head">
+              <span>[Skill - IT ]</span><span>75%</span>
+            </div>
+            <div class="saber">
+              <div class="hilt"></div>
+              <div class="blade-track"><div class="blade"></div></div>
+            </div>
+          </div>
+          <div class="ability" style="--level: 70%">
+            <div class="ability-head">
+              <span>[Skill - Reading]</span><span>70%</span>
+            </div>
+            <div class="saber">
+              <div class="hilt"></div>
+              <div class="blade-track"><div class="blade"></div></div>
+            </div>
+          </div>
+          <div class="ability" style="--level: 65%">
+            <div class="ability-head">
+              <span>[Skill - Writing]</span><span>65%</span>
+            </div>
+            <div class="saber">
+              <div class="hilt"></div>
+              <div class="blade-track"><div class="blade"></div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== Missions ===== -->
+      <section id="projects" class="container">
+        <span class="kicker reveal">// 03 · Missions</span>
+        <h2 class="section-title reveal">Missions</h2>
+        <p class="section-sub reveal">Things I've built across the galaxy.</p>
+
+        <div class="projects">
+          <article class="holo-card mission reveal">
+            <div class="mission-cover">
+              <span class="mission-id">MISSION 01</span>
+              <div class="mini-planet"></div>
+            </div>
+            <div class="mission-body">
+              <h3>[Project One]</h3>
+              <p>Build up data</p>
+              <div class="tags">
+                <span class="tag">[Tag]</span><span class="tag">[Tag]</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="holo-card mission reveal">
+            <div class="mission-cover">
+              <span class="mission-id">MISSION 02</span>
+              <div class="mini-planet"></div>
+            </div>
+            <div class="mission-body">
+              <h3>[Project Two]</h3>
+              <p>Build up confidence</p>
+              <div class="tags">
+                <span class="tag">[Tag]</span><span class="tag">[Tag]</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="holo-card mission reveal">
+            <div class="mission-cover">
+              <span class="mission-id">MISSION 03</span>
+              <div class="mini-planet"></div>
+            </div>
+            <div class="mission-body">
+              <h3>[Project Three]</h3>
+              <p>Data usage</p>
+              <div class="tags">
+                <span class="tag">[Tag]</span><span class="tag">[Tag]</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ===== Star log ===== -->
+      <section id="journey" class="container">
+        <span class="kicker reveal">// 04 · Star log</span>
+        <h2 class="section-title reveal">My journey through the galaxy</h2>
+        <p class="section-sub reveal">Every stop along the hyperspace route.</p>
+
+        <div class="timeline">
+          <div class="holo-card milestone reveal">
+            <span class="when">[2024 – NOW]</span>
+            <h3>captain · Galactic Federation</h3>
+            <p>Navigate new star to explore new opportunities.</p>
+          </div>
+          <div class="holo-card milestone reveal">
+            <span class="when">[2022 – 2024]</span>
+            <h3>Trainee · Galactic community</h3>
+            <p>Learned to be better.</p>
+          </div>
+          <div class="holo-card milestone reveal">
+            <span class="when">[2018 – 2022]</span>
+            <h3>[Degree: Co-creator] · [University of Universe]</h3>
+            <p>Travel the space.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== Comms ===== -->
+      <section id="contact" class="container contact">
+        <div class="holo-card reveal">
+          <span class="kicker">// 05 · Comms</span>
+          <h2>Open a comm channel 📡</h2>
+          <p>
+            A friendly line, e.g. "Whether you're from Earth or the outer rim,
+            I'm always happy to talk ideas and collaborations."
+          </p>
+          <a href="mailto:[you@email.com]" class="btn">[you@email.com]</a>
+          <div class="socials">
+            <a
+              href="[https://linkedin.com/in/yourname]"
+              target="_blank"
+              rel="noopener"
+              >LinkedIn</a
+            >
+            <a
+              href="[https://github.com/yourname]"
+              target="_blank"
+              rel="noopener"
+              >GitHub</a
+            >
+            <a
+              href="[https://instagram.com/yourname]"
+              target="_blank"
+              rel="noopener"
+              >Instagram</a
+            >
+          </div>
+          <p class="droid-note">
+            All transmissions are read by a very friendly droid. 🤖
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      Crafted by The Star in a galaxy not so far away · © <span id="year"></span
+      ><br />
+      May the code be with you ✨<br />
+      <button id="replay">▶ Replay intro</button>
+    </footer>
+
+    <script>
+      // Set to false if you don't want the opening crawl
+      const SHOW_INTRO = true;
+
+      const reduceMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+
+      /* ---------- Starfield ---------- */
+      const canvas = document.getElementById("stars");
+      const ctx = canvas.getContext("2d");
+      const BASE_SPEED = reduceMotion ? 0 : 2;
+      let w,
+        h,
+        speed = BASE_SPEED,
+        targetSpeed = BASE_SPEED;
+
+      function resize() {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+      }
+      resize();
+      window.addEventListener("resize", resize);
+
+      function makeStar(randomDepth) {
+        const z = randomDepth ? Math.random() * w : w;
+        return {
+          x: (Math.random() * 2 - 1) * w,
+          y: (Math.random() * 2 - 1) * h,
+          z,
+          pz: z,
+        };
+      }
+      const stars = Array.from({ length: w < 700 ? 350 : 700 }, () =>
+        makeStar(true),
+      );
+
+      function draw() {
+        speed += (targetSpeed - speed) * 0.06;
+        ctx.fillStyle = "#05060f";
+        ctx.fillRect(0, 0, w, h);
+        ctx.lineCap = "round";
+
+        const cx = w / 2,
+          cy = h / 2,
+          f = w / 2;
+        for (const s of stars) {
+          s.pz = s.z;
+          s.z -= speed;
+          if (s.z < 1) {
+            Object.assign(s, makeStar(false));
+            continue;
+          }
+
+          const sx = (s.x / s.z) * f + cx,
+            sy = (s.y / s.z) * f + cy;
+          const px = (s.x / s.pz) * f + cx,
+            py = (s.y / s.pz) * f + cy;
+          if (sx < 0 || sx > w || sy < 0 || sy > h) continue;
+
+          const depth = 1 - s.z / w;
+          ctx.strokeStyle = `rgba(${(200 + depth * 55) | 0}, ${(220 + depth * 35) | 0}, 255, ${0.3 + depth * 0.7})`;
+          ctx.lineWidth = Math.max(0.6, depth * 2.6);
+          ctx.beginPath();
+          ctx.moveTo(px, py);
+          ctx.lineTo(sx + 0.1, sy);
+          ctx.stroke();
+        }
+        requestAnimationFrame(draw);
+      }
+      draw();
+
+      function hyperspace(ms = 1200) {
+        if (reduceMotion) return;
+        targetSpeed = 45;
+        setTimeout(() => (targetSpeed = BASE_SPEED), ms);
+      }
+      document
+        .getElementById("warp-btn")
+        .addEventListener("click", () => hyperspace(1500));
+
+      /* ---------- Opening crawl ---------- */
+      const intro = document.getElementById("intro");
+      let introDone = false;
+
+      function endIntro(instant = false) {
+        if (introDone) return;
+        introDone = true;
+        if (instant) {
+          intro.remove();
+          document.body.classList.remove("intro-active");
+          return;
+        }
+        hyperspace(1400);
+        intro.classList.add("leaving");
+        setTimeout(() => {
+          intro.remove();
+          document.body.classList.remove("intro-active");
+        }, 1000);
+      }
+
+      if (!SHOW_INTRO || reduceMotion) {
+        endIntro(true);
+      } else {
+        document
+          .getElementById("skip-intro")
+          .addEventListener("click", () => endIntro());
+        document
+          .querySelector(".crawl")
+          .addEventListener("animationend", () => endIntro());
+        window.addEventListener("keydown", (e) => {
+          if (e.key === "Escape") endIntro();
+        });
+      }
+
+      document
+        .getElementById("replay")
+        .addEventListener("click", () => location.reload());
+
+      /* ---------- Mobile menu ---------- */
+      const menuBtn = document.querySelector(".menu-btn");
+      const navLinks = document.querySelector(".nav-links");
+      menuBtn.addEventListener("click", () =>
+        navLinks.classList.toggle("open"),
+      );
+      navLinks
+        .querySelectorAll("a")
+        .forEach((link) =>
+          link.addEventListener("click", () =>
+            navLinks.classList.remove("open"),
+          ),
+        );
+
+      /* ---------- Reveal on scroll ---------- */
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("visible");
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.15 },
+      );
+      document
+        .querySelectorAll(".reveal")
+        .forEach((el) => observer.observe(el));
+
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>
